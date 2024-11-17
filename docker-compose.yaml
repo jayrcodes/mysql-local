@@ -1,0 +1,20 @@
+services:
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_${MYSQL_PORT}
+    restart: unless-stopped
+    volumes:
+      - mysql_data:/var/lib/mysql:delegated
+      - ./config/my.cnf:/etc/mysql/conf.d/custom.cnf
+    environment:
+      - "MYSQL_ALLOW_EMPTY_PASSWORD=no"
+      - "MYSQL_DATABASE=acme"
+      - "MYSQL_ROOT_PASSWORD=secret"
+      - "MYSQL_TCP_PORT=${MYSQL_PORT}"
+    ports:
+      - "${MYSQL_PORT}:${MYSQL_PORT}"
+    mem_limit: 512m
+
+volumes:
+  mysql_data:
+    driver: local
